@@ -137,9 +137,12 @@ public class IntList {
      * read or understand this method.
      */
     public boolean equals(Object x) {
-        if (!(x instanceof IntList)) {
+        if (x == this) return true;
+
+        if (x == null || !(x instanceof IntList)) {
             return false;
         }
+
         IntList L = (IntList) x;
         IntList p;
 
