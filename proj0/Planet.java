@@ -38,4 +38,10 @@ public class Planet {
 		}
 	}
 
+
+	public double calcDistance(Planet planet){
+		double r2 = Math.pow(planet.xxPos - this.xxPos, 2) + Math.pow(planet.yyPos - this.yyPos, 2);
+		return Math.sqrt(r2);
+	}
+
 }
