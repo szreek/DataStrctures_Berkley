@@ -1,3 +1,5 @@
+import java.util.Arrays;
+import java.util.stream.*;
 /**
  * A data structure representing planet
  */
@@ -55,5 +57,21 @@ public class Planet {
 
 	public double calcForceExertedByY(Planet planet){
 		return calcForceExertedBy(planet) * (planet.yyPos - this.yyPos) / calcDistance(planet); 
+	}
+
+	public double calcNetForceExertedByX(Planet[] allPlanets){
+		return Arrays.asList(allPlanets)
+				.stream()
+				.filter( p -> !this.equals(p))
+				.mapToDouble( p -> calcForceExertedByX(p))
+				.sum();
+	}
+
+	public double calcNetForceExertedByY(Planet[] allPlanets){
+		return Arrays.asList(allPlanets)
+				.stream()
+				.filter( p -> !this.equals(p))
+				.mapToDouble( p -> calcForceExertedByY(p))
+				.sum();
 	}
 }
