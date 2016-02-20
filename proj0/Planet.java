@@ -44,4 +44,8 @@ public class Planet {
 		return Math.sqrt(r2);
 	}
 
+	public double calcForceExertedBy(Planet planet){
+		double G = 6.67 * Math.pow(10, -11);
+		return G * this.mass * planet.mass / Math.pow(calcDistance(planet), 2);
+	}
 }
