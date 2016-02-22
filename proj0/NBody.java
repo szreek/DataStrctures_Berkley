@@ -1,6 +1,7 @@
 public class NBody {
 
-	private static final int RADIUS_POSITION = 1;
+	private static final int RADIUS_POSITION = 2;
+	private static final int NUM_METADATA_ROWS = 2;
 
 	/**
 	* A method that reads universe radius from path
@@ -9,8 +10,8 @@ public class NBody {
 	public static double readRadius(String path){
 		double uniRadius = 0.0;
 		In stream = openStream(path);
-		for (int i = 1; i < 3; i++) {
-			if (i % 2 != 0) {
+		for (int i = 1; i <= NUM_METADATA_ROWS; i++) {
+			if (i % RADIUS_POSITION != 0) {
 				stream.readInt();
 			} else {
 				uniRadius = stream.readDouble();
