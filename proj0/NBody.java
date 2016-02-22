@@ -4,8 +4,10 @@ public class NBody {
 	private static final int NUM_METADATA_ROWS = 2;
 
 	/**
-	* A method that reads universe radius from path
-	* to planets data file
+	* A method that reads universe radius from
+	* planets data file
+	* @param  path to planets.txt
+	* @return radius
 	**/
 	public static double readRadius(String path){
 		double uniRadius = 0.0;
