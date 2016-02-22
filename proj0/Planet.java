@@ -74,4 +74,15 @@ public class Planet {
 				.mapToDouble( p -> calcForceExertedByY(p))
 				.sum();
 	}
+
+	public void update(double dt, double fX, double fY){
+		double ax = fX / this.mass;
+		double ay = fY / this.mass;
+
+		this.xxVel = this.xxVel + dt * ax;
+		this.yyVel = this.yyVel + dt * ay;
+
+		this.xxPos = this.xxPos + dt * this.xxVel;
+		this.yyPos = this.yyPos + dt * this.yyVel;
+	}
 }
