@@ -43,7 +43,7 @@ public class NBody {
 		String[] data = stream.readAllLines();
 
 		for (int i = 0; i < numPlanets; i++){
-			planets[i] = strLineToPlanet(data[2+i]);
+			planets[i] = strLineToPlanet(data[NUM_METADATA_ROWS+i]);
 
 		}
 		return planets;
