@@ -35,7 +35,6 @@ public class NBody {
 	public static Planet[] readPlanets(String path){
 		In stream = openStream(path);
 		numPlanets = stream.readInt();
-		uniRadius = stream.readDouble();
 		stream.close();
 
 		stream = openStream(path);
@@ -46,6 +45,7 @@ public class NBody {
 			planets[i] = strLineToPlanet(data[NUM_METADATA_ROWS+i]);
 
 		}
+		stream.close();
 		return planets;
 	}
 	
