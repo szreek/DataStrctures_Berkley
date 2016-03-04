@@ -31,7 +31,12 @@ public class NBody {
 		return uniRadius;
 	}
 
-
+	/**
+	* A method that reads Planets from
+	* planets data file
+	* @param path to planets.txt
+	* @return array of planets
+	**/
 	public static Planet[] readPlanets(String path){
 		In stream = openStream(path);
 		numPlanets = stream.readInt();
