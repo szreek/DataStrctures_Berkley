@@ -20,13 +20,18 @@ public class NBody {
 		uniRadius = readRadius(filename);
 		Planet[] planets = readPlanets(filename);
 		drawBackground();
+		drawPlanets(planets);
 	}
 
 
 	public static void drawBackground(){
-		StdDraw.setScale(0, 0);
+		StdDraw.setScale(-uniRadius, uniRadius);
 		StdDraw.clear();
 		StdDraw.picture(0, 75, "./images/starfield.jpg");
+	}
+
+	public static void drawPlanets(Planet[] planets){
+		Arrays.asList(planets).forEach(p -> p.draw());
 	}
 
 	/**
