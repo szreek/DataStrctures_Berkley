@@ -12,6 +12,23 @@ public class NBody {
 	private static int numPlanets;
 	private static double uniRadius;
 
+
+	public static void main(String[] args) {
+		double t = Double.parseDouble(args[0]);
+		double dt = Double.parseDouble(args[1]);
+		String filename = args[2];
+		uniRadius = readRadius(filename);
+		Planet[] planets = readPlanets(filename);
+		drawBackground();
+	}
+
+
+	public static void drawBackground(){
+		StdDraw.setScale(0, 0);
+		StdDraw.clear();
+		StdDraw.picture(0, 75, "./images/starfield.jpg");
+	}
+
 	/**
 	* A method that reads universe radius from
 	* planets data file
