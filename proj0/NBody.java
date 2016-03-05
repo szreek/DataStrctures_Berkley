@@ -107,10 +107,9 @@ public class NBody {
 	public static void printCurrentStateOfUniverse(Planet[] planets){
 		StdOut.printf("%d\n", planets.length);
 		StdOut.printf("%.2e\n", uniRadius);
-		for (int i = 0; i < planets.length; i++) {
-			StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
-   			planets[i].xxPos, planets[i].yyPos, planets[i].xxVel, planets[i].yyVel, planets[i].mass, planets[i].imgFileName);	
-		}	
+		Arrays.asList(planets).stream().forEach( p -> 
+											StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
+   											p.xxPos, p.yyPos, p.xxVel, p.yyVel, p.mass, p.imgFileName));	
 	}
 	
 	//#################_private_helper_methods_######################
