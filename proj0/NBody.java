@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.stream.*;
 import java.util.Scanner;
 import java.util.regex.*;
+import java.util.function.*;
 
 public class NBody {
 
@@ -20,6 +21,7 @@ public class NBody {
 		uniRadius = readRadius(filename);
 		Planet[] planets = readPlanets(filename);
 		drawMovingUniverse(planets, t, dt);
+		printCurrentStateOfUniverse(planets);
 	}
 
 
@@ -76,8 +78,7 @@ public class NBody {
 		public static void drawMovingUniverse(Planet[] planets, double time, double timeDiff){
 		Double[] xForces = null;
 		Double[] yForces = null;
-		
-		
+			
 		for (double i = 0; i < time ; i = i + timeDiff) {
 			xForces = Arrays.asList(planets).stream()
 								  			.mapToDouble(p -> p.calcNetForceExertedByX(planets))
@@ -95,9 +96,21 @@ public class NBody {
 			updatePlanetMovements(planets, xForces, yForces, timeDiff);
 			drawBackground();
 			drawPlanets(planets);
-			setAnimationPauseInterval(10);
-			
+			setAnimationPauseInterval(10);			
 		} 
+	}
+
+	/**
+	* A method that prints state of the lanets in the Universe
+	* @param array of planets
+	**/
+	public static void printCurrentStateOfUniverse(Planet[] planets){
+		StdOut.printf("%d\n", planets.length);
+		StdOut.printf("%.2e\n", uniRadius);
+		for (int i = 0; i < planets.length; i++) {
+			StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
+   			planets[i].xxPos, planets[i].yyPos, planets[i].xxVel, planets[i].yyVel, planets[i].mass, planets[i].imgFileName);	
+		}	
 	}
 	
 	//#################_private_helper_methods_######################
