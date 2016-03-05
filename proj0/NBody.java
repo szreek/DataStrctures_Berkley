@@ -32,16 +32,9 @@ public class NBody {
 	* @return radius
 	**/
 	public static double readRadius(String path){
-		double uniRadius = 0.0;
 		In stream = openStream(path);
-		for (int i = 1; i <= NUM_METADATA_ROWS; i++) {
-			if (i % RADIUS_POSITION != 0) {
-				numPlanets = stream.readInt();
-			} else {
-				uniRadius = stream.readDouble();
-			}
-		}
-		return uniRadius;
+		numPlanets = stream.readInt();
+		return stream.readDouble();
 	}
 
 	/**
