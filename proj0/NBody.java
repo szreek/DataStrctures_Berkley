@@ -19,20 +19,9 @@ public class NBody {
 		String filename = args[2];
 		uniRadius = readRadius(filename);
 		Planet[] planets = readPlanets(filename);
-		drawBackground();
-		drawPlanets(planets);
+		drawMovingUniverse(planets, t, dt);
 	}
 
-
-	public static void drawBackground(){
-		StdDraw.setScale(-uniRadius, uniRadius);
-		StdDraw.clear();
-		StdDraw.picture(0, 75, "./images/starfield.jpg");
-	}
-
-	public static void drawPlanets(Planet[] planets){
-		Arrays.asList(planets).forEach(p -> p.draw());
-	}
 
 	/**
 	* A method that reads universe radius from
@@ -75,8 +64,61 @@ public class NBody {
 		stream.close();
 		return planets;
 	}
+
+		/**
+		* A method that creates an animation
+		* presenting planet movements for a given amount of time t.
+		* Each movement reduces remaining time by time period dt.
+		* @param array of planets
+		* @param time interval
+		* @param time of a single movement  
+		**/
+		public static void drawMovingUniverse(Planet[] planets, double time, double timeDiff){
+		Double[] xForces = null;
+		Double[] yForces = null;
+		
+		
+		for (double i = 0; i < time ; i = i + timeDiff) {
+			xForces = Arrays.asList(planets).stream()
+								  			.mapToDouble(p -> p.calcNetForceExertedByX(planets))
+								  			.boxed()
+								  			.collect(Collectors.toCollection(ArrayList::new))
+								  			.toArray(new Double[planets.length]);
+
+			yForces = Arrays.asList(planets).stream()
+								  			.mapToDouble(p -> p.calcNetForceExertedByY(planets))
+								  			.boxed()
+								  			.collect(Collectors.toCollection(ArrayList::new))
+								  			.toArray(new Double[planets.length]);								  		
+
+			
+			updatePlanetMovements(planets, xForces, yForces, timeDiff);
+			drawBackground();
+			drawPlanets(planets);
+			setAnimationPauseInterval(10);
+			
+		} 
+	}
 	
 	//#################_private_helper_methods_######################
+	private static void drawBackground(){
+		StdDraw.setScale(-uniRadius, uniRadius);
+		StdDraw.clear();
+		StdDraw.picture(0, 75, "./images/starfield.jpg");
+	}
+
+	private static void drawPlanets(Planet[] planets){
+		Arrays.asList(planets).forEach(p -> p.draw());
+	}
+
+	private static void updatePlanetMovements(Planet[] planets, Double[] xForces, Double[] yForces, double timeDiff){
+		for (int j = 0; j < planets.length; j++) planets[j].update(timeDiff, xForces[j], yForces[j]);
+	}
+
+	private static void setAnimationPauseInterval(int interval){
+		StdDraw.show(10);
+	}
+
 	private static In openStream(String path){
 		In instream = new In(path);
 		if (!instream.exists()) {
