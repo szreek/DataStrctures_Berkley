@@ -1,7 +1,4 @@
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
@@ -9,31 +6,35 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
- * A JavaFX application that displays the letter the user has typed most recently, with a box
- * around it.  The box changes color every second, and the user can change the size of the letter
- * using the up and down arrows.
+ * A JavaFX application that displays the letter the user has typed most recently in the center of
+ * the window. Pressing the up and down arrows causes the font size to increase and decrease,
+ * respectively.
  */
 public class SingleLetterDisplaySimple extends Application {
+    private static final int WINDOW_WIDTH = 500;
+    private static final int WINDOW_HEIGHT = 500;
 
     /** An EventHandler to handle keys that get pressed. */
     private class KeyEventHandler implements EventHandler<KeyEvent> {
         int textCenterX;
         int textCenterY;
 
+        private static final int STARTING_FONT_SIZE = 20;
+        private static final int STARTING_TEXT_POSITION_X = 250;
+        private static final int STARTING_TEXT_POSITION_Y = 250;
+
         /** The Text to display on the screen. */
-        public Text displayText = new Text(250, 250, "");
-        public int fontSize = 20;
+        private Text displayText = new Text(STARTING_TEXT_POSITION_X, STARTING_TEXT_POSITION_Y, "");
+        private int fontSize = STARTING_FONT_SIZE;
 
         private String fontName = "Verdana";
 
-        public KeyEventHandler(final Group root, int windowWidth, int windowHeight) {
+        KeyEventHandler(final Group root, int windowWidth, int windowHeight) {
             textCenterX = windowWidth / 2;
             textCenterY = windowHeight / 2;
 
@@ -45,7 +46,7 @@ public class SingleLetterDisplaySimple extends Application {
             // opposed to the top of a letter like "e"), which makes calculating positions much
             // simpler!
             displayText.setTextOrigin(VPos.TOP);
-            displayText.setFont(Font.font (fontName, fontSize));
+            displayText.setFont(Font.font(fontName, fontSize));
 
             // All new Nodes need to be added to the root in order to be displayed.
             root.getChildren().add(displayText);
@@ -59,8 +60,8 @@ public class SingleLetterDisplaySimple extends Application {
                 // capitalization.
                 String characterTyped = keyEvent.getCharacter();
                 if (characterTyped.length() > 0 && characterTyped.charAt(0) != 8) {
-                    // Ignore control keys, which have non-zero length, as well as the backspace key, which is
-                    // represented as a character of value = 8 on Windows.
+                    // Ignore control keys, which have non-zero length, as well as the backspace
+                    // key, which is represented as a character of value = 8 on Windows.
                     displayText.setText(characterTyped);
                     keyEvent.consume();
                 }
@@ -107,20 +108,18 @@ public class SingleLetterDisplaySimple extends Application {
         Group root = new Group();
         // The Scene represents the window: its height and width will be the height and width
         // of the window displayed.
-        int windowWidth = 500;
-        int windowHeight = 500;
-        Scene scene = new Scene(root, windowWidth, windowHeight, Color.WHITE);
+        Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, Color.WHITE);
 
         // To get information about what keys the user is pressing, create an EventHandler.
         // EventHandler subclasses must override the "handle" function, which will be called
         // by javafx.
         EventHandler<KeyEvent> keyEventHandler =
-                new KeyEventHandler(root, windowWidth, windowHeight);
+                new KeyEventHandler(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         // Register the event handler to be called for all KEY_PRESSED and KEY_TYPED events.
         scene.setOnKeyTyped(keyEventHandler);
         scene.setOnKeyPressed(keyEventHandler);
 
-        primaryStage.setTitle("Single Letter Display");
+        primaryStage.setTitle("Single Letter Display Simple");
 
         // This is boilerplate, necessary to setup the window where things are displayed.
         primaryStage.setScene(scene);

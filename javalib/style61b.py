@@ -14,7 +14,7 @@ windows_dir_names = classpath.split(';')
 all_dirs = unix_dir_names
 all_dirs.extend(windows_dir_names)
 
-checkstyle_jar_name = 'checkstyle-5.9-all.jar'
+checkstyle_jar_name = 'checkstyle-6.15-all.jar'
 checkstyle_rules_name = '61b_checks.xml'
 
 checkstyle_jar_path = None
@@ -44,12 +44,12 @@ skipfiles = set([])
 if os.path.isfile('styleskip.txt'):
 	with open("styleskip.txt", "r") as f:
 		for line in f:
-			skipfiles.add(line.strip()) 
+			skipfiles.add(line.strip())
 else:
 	print("No styleskip.txt found. Create one if you'd like to skip some files.")
 
 files_to_check = set(sys.argv[1:]).difference(skipfiles)
 
-system_command = 'java -jar ' + checkstyle_jar_path +  ' -c ' + checkstyle_rules_path + " " + " ".join(files_to_check)
+system_command = 'java -jar "' + checkstyle_jar_path +  '" -c "' + checkstyle_rules_path + '" ' + " ".join(files_to_check)
 print("Running command: " + system_command)
 os.system(system_command)
