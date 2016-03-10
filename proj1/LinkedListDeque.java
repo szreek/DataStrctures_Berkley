@@ -94,11 +94,29 @@ public class LinkedListDeque<I> implements Collection<I>{
             return null;
         }
         else {
+            I returnValue = null;
             int i = 0;
             for (LldNode<I> n = head;  n != null; n = n.next){
-                if (i == index) return head.value;
-                i++;
-            } return null;
+                if (index == i++)  returnValue = head.value;
+            }return returnValue;
         }
     }
+
+    @Override
+    public I getRecursive(int index) {
+        I returnValue = null;
+        if (index >= size || index < 0 || head == null) {
+            return null;
+        }
+        else {
+            returnValue  = getRecursiveHelper(index, head);
+        } return returnValue;
+    }
+
+    private I getRecursiveHelper(int index, LldNode<I> head) {
+        if(index == 0) return head.value;
+        else return getRecursiveHelper(index--, head.next);
+    }
+
+
 }
