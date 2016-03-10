@@ -75,6 +75,7 @@ public class LinkedListDeque<I> implements Collection<I>{
         if (head != null){
             LldNode<I> oldFirst = head;
             head = head.next;
+            size --;
              return oldFirst.value;
         } else return null;
     }
@@ -84,6 +85,7 @@ public class LinkedListDeque<I> implements Collection<I>{
         if (tail != null) {
             LldNode<I> oldLast = tail;
             tail = tail.prev;
+            size --;
             return oldLast.value;
         } else return null;
     }
