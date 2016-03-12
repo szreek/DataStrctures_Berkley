@@ -8,6 +8,10 @@ public class LinkedListDeque<I> implements Collection<I>{
         private LldNode<I> next;
         private LldNode<I> prev;
 
+        private LldNode(){
+            next = this;
+            prev = this;
+        }
 
         private LldNode(I value, LldNode<I> prev, LldNode<I> next) {
             this.value = value;
@@ -15,47 +19,39 @@ public class LinkedListDeque<I> implements Collection<I>{
             this.next = next;
         }
 
-        private LldNode(I value) {
-            this.value = value;
+        @Override
+        public String toString() {
+            return value.toString();
         }
-
-
     }
 
-    private LldNode<I> head;
-    private LldNode<I> tail;
+    private LldNode<I> sentinel = new LldNode<I>();
     private int size;
 
     public LinkedListDeque(){
-
     }
 
     public LinkedListDeque(I value){
-        LldNode<I> node = new LldNode(value);
-        head = node;
-        tail = node;
+        sentinel.next = new LldNode(value, sentinel, sentinel);
         size++;
     }
 
 
     @Override
     public void addFirst(I item) {
-        head = new LldNode(item, null, head);
+        sentinel.next = new LldNode(item, sentinel, sentinel.next);
         size++;
     }
 
     @Override
     public void addLast(I item) {
-        if (tail != null) {
-            tail.next = new LldNode(item, tail, null);
-            tail = tail.next;
-            size++;
-        }else addFirst(item);
+        sentinel.prev = new LldNode<>(item, sentinel.prev, sentinel);
+        size++;
     }
 
     @Override
     public boolean isEmpty() {
-        return head == null;
+        return size == 0;
     }
 
     @Override
@@ -65,60 +61,65 @@ public class LinkedListDeque<I> implements Collection<I>{
 
     @Override
     public void printDeque() {
-        for (LldNode<I> n = head; n != null; n = n.next) {
-            System.out.println(n.value + " -> ");
+        for (LldNode<I> n = sentinel.next; n != sentinel; n = n.next) {
+            System.out.println(n);
         }
+
     }
 
     @Override
     public I removeFirst() {
-        if (head != null){
-            LldNode<I> oldFirst = head;
-            head = head.next;
-            size --;
-             return oldFirst.value;
-        } else return null;
+        LldNode<I> first = sentinel.next;
+        sentinel.next = first.next;
+        size --;
+        return first.value;
+
     }
 
     @Override
     public I removeLast() {
-        if (tail != null) {
-            LldNode<I> oldLast = tail;
-            tail = tail.prev;
-            size --;
-            return oldLast.value;
-        } else return null;
+        LldNode<I> last = sentinel.prev;
+        sentinel.prev = last.prev;
+        size --;
+        return last.value;
     }
 
     @Override
     public I get(int index) {
-        if (index >= size || head == null) {
-            return null;
-        }
-        else {
-            I returnValue = null;
-            int i = 0;
-            for (LldNode<I> n = head;  n != null; n = n.next){
-                if (index == i++)  returnValue = head.value;
-            }return returnValue;
-        }
+        if (index >= size || index < 0) throw new IndexOutOfBoundsException();
+        return (index > size/2) ? findFromTail(--size - index) : findFromHead(index);
     }
 
     @Override
     public I getRecursive(int index) {
-        I returnValue = null;
-        if (index >= size || index < 0 || head == null) {
-            return null;
-        }
-        else {
-            returnValue  = getRecursiveHelper(index, head);
-        } return returnValue;
+        if (index >= size || index < 0)  throw new IndexOutOfBoundsException();
+        return getRecursiveHelper(index, sentinel.next);
     }
 
+
+    //#####################_PRIVATE_HELPER_METHODS_#####################################
     private I getRecursiveHelper(int index, LldNode<I> head) {
         if(index == 0) return head.value;
         else return getRecursiveHelper(index--, head.next);
     }
 
+    private I findFromTail(int indexFromTail){
+        int i  = 0;
+        LldNode<I> node = sentinel;
+        for(LldNode n = sentinel.prev; n!= sentinel; n = sentinel.prev){
+            if (i == indexFromTail) node = n;
+            else i++;
+        }
+        return node.value;
+    }
 
+    private I findFromHead(int index){
+        int i = 0;
+        LldNode<I> node = sentinel;
+        for (LldNode n = sentinel.next; n != sentinel; n = sentinel.next){
+            if (i == index) node =  n;
+            else i++;
+        }
+        return node.value;
+    }
 }
