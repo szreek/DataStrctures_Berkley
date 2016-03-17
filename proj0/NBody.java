@@ -70,7 +70,7 @@ public class NBody {
 		public static void drawMovingUniverse(Planet[] planets, double time, double timeDiff){
 
 			IntStream.range(0, (int)(time/timeDiff))
-						.forEach(i -> {
+					 .forEach(i -> {
 							Double[] xForces = Arrays.asList(planets).stream()
 								  			.mapToDouble(p -> p.calcNetForceExertedByX(planets))
 								  			.boxed()
@@ -115,7 +115,8 @@ public class NBody {
 	}
 
 	private static void updatePlanetMovements(Planet[] planets, Double[] xForces, Double[] yForces, double timeDiff){
-		for (int j = 0; j < planets.length; j++) planets[j].update(timeDiff, xForces[j], yForces[j]);
+		IntStream.range(0, planets.length)
+				 .forEach(j -> planets[j].update(timeDiff, xForces[j], yForces[j]));
 	}
 
 	private static void setAnimationPauseInterval(int interval){
