@@ -68,28 +68,27 @@ public class NBody {
 		* @param time of a single movement  
 		**/
 		public static void drawMovingUniverse(Planet[] planets, double time, double timeDiff){
-		Double[] xForces = null;
-		Double[] yForces = null;
-			
-		for (double i = 0; i < time ; i = i + timeDiff) {
-			xForces = Arrays.asList(planets).stream()
+
+			IntStream.range(0, (int)(time/timeDiff))
+						.forEach(i -> {
+							Double[] xForces = Arrays.asList(planets).stream()
 								  			.mapToDouble(p -> p.calcNetForceExertedByX(planets))
 								  			.boxed()
 								  			.collect(Collectors.toCollection(ArrayList::new))
 								  			.toArray(new Double[planets.length]);
 
-			yForces = Arrays.asList(planets).stream()
+							Double[] yForces = Arrays.asList(planets).stream()
 								  			.mapToDouble(p -> p.calcNetForceExertedByY(planets))
 								  			.boxed()
 								  			.collect(Collectors.toCollection(ArrayList::new))
 								  			.toArray(new Double[planets.length]);								  		
 
 			
-			updatePlanetMovements(planets, xForces, yForces, timeDiff);
-			drawBackground();
-			drawPlanets(planets);
-			setAnimationPauseInterval(10);			
-		} 
+							updatePlanetMovements(planets, xForces, yForces, timeDiff);
+							drawBackground();
+							drawPlanets(planets);
+							setAnimationPauseInterval(10);			
+		});
 	}
 
 	/**
