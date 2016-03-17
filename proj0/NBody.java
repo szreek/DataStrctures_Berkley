@@ -52,10 +52,9 @@ public class NBody {
 		Planet[] planets = new Planet[numPlanets];
 		String[] data = stream.readAllLines();
 
-		for (int i = 0; i < numPlanets; i++){
-			planets[i] = strLineToPlanet(data[NUM_METADATA_ROWS+i]);
+		IntStream.range(0, numPlanets)
+				.forEach( i -> planets[i] = strLineToPlanet(data[NUM_METADATA_ROWS+i]));
 
-		}
 		stream.close();
 		return planets;
 	}
