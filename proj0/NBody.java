@@ -31,7 +31,7 @@ public class NBody {
 	* @param  path to planets.txt
 	* @return radius
 	**/
-	public static double readRadius(String path){
+	public static double readRadius(final String path){
 		In stream = openStream(path);
 		numPlanets = stream.readInt();
 		return stream.readDouble();
@@ -43,7 +43,7 @@ public class NBody {
 	* @param path to planets.txt
 	* @return array of planets
 	**/
-	public static Planet[] readPlanets(String path){
+	public static Planet[] readPlanets(final String path){
 		In stream = openStream(path);
 		numPlanets = stream.readInt();
 		stream.close();
@@ -67,7 +67,7 @@ public class NBody {
 		* @param time interval
 		* @param time of a single movement  
 		**/
-		public static void drawMovingUniverse(Planet[] planets, double time, double timeDiff){
+		public static void drawMovingUniverse(final Planet[] planets, final double time, final double timeDiff){
 
 			IntStream.range(0, (int)(time/timeDiff))
 					 .forEach(i -> {
@@ -95,7 +95,7 @@ public class NBody {
 	* A method that prints state of the lanets in the Universe
 	* @param array of planets
 	**/
-	public static void printCurrentStateOfUniverse(Planet[] planets){
+	public static void printCurrentStateOfUniverse(final Planet[] planets){
 		StdOut.printf("%d\n", planets.length);
 		StdOut.printf("%.2e\n", uniRadius);
 		Arrays.asList(planets).stream().forEach( p -> 
@@ -110,20 +110,20 @@ public class NBody {
 		StdDraw.picture(0, 75, "./images/starfield.jpg");
 	}
 
-	private static void drawPlanets(Planet[] planets){
+	private static void drawPlanets(final Planet[] planets){
 		Arrays.asList(planets).forEach(p -> p.draw());
 	}
 
-	private static void updatePlanetMovements(Planet[] planets, Double[] xForces, Double[] yForces, double timeDiff){
+	private static void updatePlanetMovements(final Planet[] planets, final Double[] xForces, final Double[] yForces, final double timeDiff){
 		IntStream.range(0, planets.length)
 				 .forEach(j -> planets[j].update(timeDiff, xForces[j], yForces[j]));
 	}
 
-	private static void setAnimationPauseInterval(int interval){
+	private static void setAnimationPauseInterval(final int interval){
 		StdDraw.show(10);
 	}
 
-	private static In openStream(String path){
+	private static In openStream(final String path){
 		In instream = new In(path);
 		if (!instream.exists()) {
 			throw new IllegalArgumentException("No stream with the given path: " + path);
@@ -132,7 +132,7 @@ public class NBody {
 	}
 
 
-	private static Planet strLineToPlanet(String strPlanet){
+	private static Planet strLineToPlanet(final String strPlanet){
 		String[] tokens = strPlanet.split("\\s+");
 		String imgFileName = tokens[tokens.length - 1];
 
