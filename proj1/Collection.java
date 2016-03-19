@@ -3,7 +3,7 @@
  */
 public interface Collection<I> {
     public void addFirst(I item);
-    public void addLast(I Item);
+    public void addLast(I item);
     public boolean isEmpty();
     public int size();
     public void printDeque();
