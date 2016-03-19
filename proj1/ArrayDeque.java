@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
  */
 public class ArrayDeque<I> implements Collection<I> {
 
-    private static final int DEAFAULT_SIZE = 8;
+    private static final int DEFAULT_SIZE = 8;
     private I[] array;
     private Integer head;
     private Integer tail;
@@ -16,8 +16,8 @@ public class ArrayDeque<I> implements Collection<I> {
     private int capacity;
 
     public ArrayDeque() {
-        array = (I[]) new Object[DEAFAULT_SIZE];
-        capacity = DEAFAULT_SIZE;
+        array = (I[]) new Object[DEFAULT_SIZE];
+        capacity = DEFAULT_SIZE;
     }
 
     @Override
@@ -25,9 +25,7 @@ public class ArrayDeque<I> implements Collection<I> {
         if (++size > capacity) resize();
         shiftItemsToTheRight(0, size);
         array[0] = item;
-
     }
-
 
     @Override
     public void addLast(I item) {
@@ -47,9 +45,7 @@ public class ArrayDeque<I> implements Collection<I> {
 
     @Override
     public void printDeque() {
-        for(int i = 0; i < size; i++){
-            System.out.println(array[i]);
-        }
+        IntStream.range(0, size - 1).forEach(i ->  System.out.println(array[i]));
     }
 
     @Override
