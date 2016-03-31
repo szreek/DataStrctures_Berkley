@@ -4,6 +4,10 @@ import java.util.stream.IntStream;
 
 /**
  * Created by luke on 10.03.2016.
+ * <todo>
+ *     make one function out of resize and resizeDownwards
+ *     add one-of-type to avoid null checking. Use Options
+ * </todo>
  */
 public class ArrayDeque<I> implements Collection<I> {
 
