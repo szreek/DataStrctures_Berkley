@@ -12,9 +12,7 @@ public class ArrayDeque<I> implements Collection<I> {
     private int size;
     private int capacity;
     private int currentHeadPos;
-    private int nextHeadPos;
     private int currentTailPos;
-    private int nextTailPos;
 
     public ArrayDeque() {
         array = (I[]) new Object[DEFAULT_SIZE];
@@ -24,17 +22,16 @@ public class ArrayDeque<I> implements Collection<I> {
     @Override
     public void addFirst(I item) {
         if (++size > capacity) resize();
-        array[nextHeadPos] = item;
-        currentHeadPos = nextHeadPos;
-        nextHeadPos = movePositionOneBackwards(nextHeadPos);
+        currentHeadPos = array[currentHeadPos] == null ? currentHeadPos : calculatePreviousPosition(currentHeadPos);
+        array[currentHeadPos] = item;
+
     }
 
     @Override
     public void addLast(I item) {
         if (++size > capacity) resize();
-        array[nextTailPos] = item;
-        currentTailPos = nextTailPos;
-        nextTailPos = movePositionOneForward(nextTailPos);
+        currentTailPos = array[currentTailPos] == null ?  currentTailPos : calculateNextPosition(currentTailPos);
+        array[currentTailPos] = item;
     }
 
     @Override
@@ -49,24 +46,23 @@ public class ArrayDeque<I> implements Collection<I> {
 
     @Override
     public void printDeque() {
-        IntStream.iterate(currentHeadPos, i -> (i + 1) % capacity).limit(capacity).forEach(i ->  System.out.print(array[i] + " "));
+        IntStream.iterate(currentHeadPos, i -> (i + 1) % capacity).limit(size)
+                .forEach(i ->  System.out.print(array[i] + " "));
     }
 
     @Override
     public I removeFirst() {
         if (--size < capacity / 2) resizeDownwards();
-        nextHeadPos = currentHeadPos;
-        currentHeadPos = movePositionOneForward(currentHeadPos);
-        return array[nextHeadPos];
+        currentHeadPos = array[currentHeadPos] == null ? currentHeadPos : calculateNextPosition(currentHeadPos);
+        return array[calculatePreviousPosition(currentHeadPos)];
     }
 
 
     @Override
     public I removeLast() {
         if (--size < capacity / 2) resizeDownwards();
-        nextTailPos = currentTailPos;
-        currentTailPos = movePositionOneBackwards(currentTailPos);
-        return array[nextTailPos];
+        currentTailPos = array[currentTailPos] == null ? currentTailPos : calculatePreviousPosition(currentTailPos);
+        return array[calculatePreviousPosition(currentTailPos)];
     }
 
     @Override
@@ -78,25 +74,27 @@ public class ArrayDeque<I> implements Collection<I> {
 
     //############PRIVATE_HELPER_METHODS_#######################################
     private void resize() {
-        int old_capacity = capacity;
         List<I> resized = new ArrayList();
-        IntStream.iterate(currentHeadPos, i -> (i + 1) % capacity).limit(capacity)
+        IntStream.iterate(currentHeadPos, i -> (i + 1) % capacity).limit(size)
                     .forEach(i -> resized.add(array[i]));
         capacity = capacity * 2;
         array = (I[]) resized.toArray(new Object[capacity]);
-        nextHeadPos = movePositionOneBackwards(0);
-        nextTailPos = movePositionOneForward(old_capacity);
+
     }
 
     private void resizeDownwards() {
-        
+        List<I> resized = new ArrayList();
+        IntStream.iterate(currentHeadPos, i -> (i + 1) % capacity).limit(size)
+                .forEach(i -> resized.add(array[i]));
+        capacity = capacity / 2;
+        array = (I[]) resized.toArray(new Object[capacity]);
     }
 
-    private int movePositionOneBackwards(int position){
+    private int calculatePreviousPosition(int position){
         return (position - 1 < 0) ? capacity : position - 1;
     }
 
-    private int movePositionOneForward(int position) {
+    private int calculateNextPosition(int position) {
         return (position + 1) % capacity;
     }
 }
