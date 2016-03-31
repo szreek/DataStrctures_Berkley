@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -10,10 +9,12 @@ public class ArrayDeque<I> implements Collection<I> {
 
     private static final int DEFAULT_SIZE = 8;
     private I[] array;
-    private Integer head;
-    private Integer tail;
     private int size;
     private int capacity;
+    private int currentHeadPos;
+    private int nextHeadPos;
+    private int currentTailPos;
+    private int nextTailPos;
 
     public ArrayDeque() {
         array = (I[]) new Object[DEFAULT_SIZE];
@@ -23,14 +24,17 @@ public class ArrayDeque<I> implements Collection<I> {
     @Override
     public void addFirst(I item) {
         if (++size > capacity) resize();
-        shiftItemsToTheRight(0, size);
-        array[0] = item;
+        array[nextHeadPos] = item;
+        currentHeadPos = nextHeadPos;
+        nextHeadPos = movePositionOneBackwards(nextHeadPos);
     }
 
     @Override
     public void addLast(I item) {
         if (++size > capacity) resize();
-        array[size - 1] = item;
+        array[nextTailPos] = item;
+        currentTailPos = nextTailPos;
+        nextTailPos = movePositionOneForward(nextTailPos);
     }
 
     @Override
@@ -45,40 +49,54 @@ public class ArrayDeque<I> implements Collection<I> {
 
     @Override
     public void printDeque() {
-        IntStream.range(0, size - 1).forEach(i ->  System.out.println(array[i]));
+        IntStream.iterate(currentHeadPos, i -> (i + 1) % capacity).limit(capacity).forEach(i ->  System.out.print(array[i] + " "));
     }
 
     @Override
     public I removeFirst() {
-        return null;
+        if (--size < capacity / 2) resizeDownwards();
+        nextHeadPos = currentHeadPos;
+        currentHeadPos = movePositionOneForward(currentHeadPos);
+        return array[nextHeadPos];
     }
+
 
     @Override
     public I removeLast() {
-        return null;
+        if (--size < capacity / 2) resizeDownwards();
+        nextTailPos = currentTailPos;
+        currentTailPos = movePositionOneBackwards(currentTailPos);
+        return array[nextTailPos];
     }
 
     @Override
     public I get(int index) {
-        return null;
-    }
-
-    @Override
-    public I getRecursive(int index) {
-        return null;
+        if (index >= size || index < 0)  throw new IndexOutOfBoundsException();
+        return array[(currentHeadPos + index) % capacity];
     }
 
 
     //############PRIVATE_HELPER_METHODS_#######################################
     private void resize() {
-        capacity = 2 * capacity;
+        int old_capacity = capacity;
         List<I> resized = new ArrayList();
-        Arrays.asList(array).stream().forEach(resized::add);
+        IntStream.iterate(currentHeadPos, i -> (i + 1) % capacity).limit(capacity)
+                    .forEach(i -> resized.add(array[i]));
+        capacity = capacity * 2;
         array = (I[]) resized.toArray(new Object[capacity]);
+        nextHeadPos = movePositionOneBackwards(0);
+        nextTailPos = movePositionOneForward(old_capacity);
     }
 
-    private void shiftItemsToTheRight(int from, int to) {
-        IntStream.range(from, to).map( i -> to - i + from - 1).forEach(i -> array[i + 1] = array[i]);
+    private void resizeDownwards() {
+        
     }
 
+    private int movePositionOneBackwards(int position){
+        return (position - 1 < 0) ? capacity : position - 1;
+    }
+
+    private int movePositionOneForward(int position) {
+        return (position + 1) % capacity;
+    }
 }

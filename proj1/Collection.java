@@ -10,5 +10,4 @@ public interface Collection<I> {
     public I removeFirst();
     public I removeLast();
     public I get(int index);
-    public I getRecursive(int index);
 }

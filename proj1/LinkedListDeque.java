@@ -62,7 +62,7 @@ public class LinkedListDeque<I> implements Collection<I>{
     @Override
     public void printDeque() {
         for (LldNode<I> n = sentinel.next; n != sentinel; n = n.next) {
-            System.out.println(n);
+            System.out.print(n + " ");
         }
 
     }
@@ -90,7 +90,7 @@ public class LinkedListDeque<I> implements Collection<I>{
         return (index > size/2) ? findFromTail(--size - index) : findFromHead(index);
     }
 
-    @Override
+
     public I getRecursive(int index) {
         if (index >= size || index < 0)  throw new IndexOutOfBoundsException();
         return getRecursiveHelper(index, sentinel.next);
