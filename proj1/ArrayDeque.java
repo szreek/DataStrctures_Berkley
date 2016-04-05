@@ -12,6 +12,8 @@ import java.util.stream.IntStream;
 public class ArrayDeque<I> implements Collection<I> {
 
     private static final int DEFAULT_SIZE = 8;
+    private static final int REDUCTION_FACTOR = 4;
+    private static final int INCREASE_FACTOR = 2;
     private I[] array;
     private int size;
     private int capacity;
@@ -56,7 +58,7 @@ public class ArrayDeque<I> implements Collection<I> {
 
     @Override
     public I removeFirst() {
-        if (--size < capacity / 2) resizeDownwards();
+        if (--size < capacity / REDUCTION_FACTOR) resizeDownwards();
         currentHeadPos = array[currentHeadPos] == null ? currentHeadPos : calculateNextPosition(currentHeadPos);
         return array[calculatePreviousPosition(currentHeadPos)];
     }
@@ -64,7 +66,7 @@ public class ArrayDeque<I> implements Collection<I> {
 
     @Override
     public I removeLast() {
-        if (--size < capacity / 2) resizeDownwards();
+        if (--size < capacity / REDUCTION_FACTOR) resizeDownwards();
         currentTailPos = array[currentTailPos] == null ? currentTailPos : calculatePreviousPosition(currentTailPos);
         return array[calculatePreviousPosition(currentTailPos)];
     }
@@ -81,7 +83,7 @@ public class ArrayDeque<I> implements Collection<I> {
         List<I> resized = new ArrayList();
         IntStream.iterate(currentHeadPos, i -> (i + 1) % capacity).limit(size)
                     .forEach(i -> resized.add(array[i]));
-        capacity = capacity * 2;
+        capacity = capacity * INCREASE_FACTOR;
         array = (I[]) resized.toArray(new Object[capacity]);
 
     }
@@ -90,7 +92,7 @@ public class ArrayDeque<I> implements Collection<I> {
         List<I> resized = new ArrayList();
         IntStream.iterate(currentHeadPos, i -> (i + 1) % capacity).limit(size)
                 .forEach(i -> resized.add(array[i]));
-        capacity = capacity / 2;
+        capacity = capacity / REDUCTION_FACTOR;
         array = (I[]) resized.toArray(new Object[capacity]);
     }
 
